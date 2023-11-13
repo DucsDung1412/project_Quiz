@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/poly.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+        <style>
+            p.error{
+                color: red;
+                font-weight: 500;
+                font-size: 16px;
+            }
+            input.ng-invalid{
+                background-image: url("/img/1001.jpg");
+                background-position: center right;
+                background-repeat: no-repeat;
+            }
+            input.ng-invalid-temp{
+                background-image: none !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container mt-3" ng-app="myApp">
+            <div class="card border-dark mb-3" ng-controller="myController">
+                <div class="card-header bg-secondary-subtle border-dark">THÔN TIN SINH VIÊN</div>
+                <div class="card-body text-dark">
+                    <form action="" name="frm">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Họ và tên</label>
+                            <input ng-model="fullname" name="fullname" maxlength="25" type="text" class="form-control ng-invalid-temp fullname" id="exampleFormControlInput1" placeholder="Nguyễn Văn A" required>
+                            <div class="d-none test1">
+                                <p class="error" ng-show="frm.fullname.$error.required">Vui lòng nhập đầy đủ họ và tên</p>
+                                <p class="error" ng-show="frm.fullname.$error.max">Họ và tên tối đa 25 ký tự</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput2" class="form-label">Điểm</label>
+                            <div class="input-group mb-3">
+                                <input ng-model="diem" name="diem" min="0" max="10" id="exampleFormControlInput2" type="number" class="form-control ng-invalid-temp diem" aria-label="Amount (to the nearest dollar)" required>
+                            </div>
+                            <div class="test2 d-none">
+                                <p class="error" ng-show="frm.diem.$error.required">Vui lòng nhập trường này</p>
+                                <p class="error" ng-show="frm.diem.$error.min">Điểm phải từ 0 đến 10</p>
+                                <p class="error" ng-show="frm.diem.$error.max">Điểm phải từ 0 đến 10</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput3" class="form-label">Email</label>
+                            <input ng-model="email" name="email" type="email" class="form-control ng-invalid-temp email" id="exampleFormControlInput3" placeholder="NguyenVanA@gmail.com" required>
+                            <div class="d-none test3">
+                                <p class="error" class="error" ng-show="frm.email.$error.required" id="test">Vui lòng nhập trường này</p>
+                                <p class="error" class="error" ng-show="frm.email.$error.email" id="test">Không đúng dạng email</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput4" class="form-label">Số xe</label>
+                            <input ng-model="soXe" name="soXe" type="text" class="form-control ng-invalid-temp soXe" id="exampleFormControlInput4" placeholder="54-P6-6666" required  pattern="5\d-[A-Z]\d-((\d{4})|(\d{3}\.\d{2}))">
+                            <div class="d-none test4">
+                                <p class="error" class="error" ng-show="frm.soXe.$error.required" id="test">Vui lòng nhập trường này</p>
+                                <p class="error" class="error" ng-show="frm.soXe.$error.pattern" id="test">Không đúng số xe sài gòn</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-secondary-subtle border-dark">
+                    <button class="btn btn-primary btnsave">Save</button>
+                    <span class="d-none success" ng-show="frm.$valid">Chúc mừng bạn đã nhập đúng</span>
+                </div>
+              </div>
+        </div>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+        <script>
+            var app = angular.module("myApp",[]);
+            
+            document.querySelector("#exampleFormControlInput1").onblur = function(){
+                document.querySelector(".test1").classList.remove("d-none");
+                document.querySelector(".fullname").classList.remove("ng-invalid-temp");
+            }
+
+            document.querySelector("#exampleFormControlInput2").onblur = function(){
+                document.querySelector(".test2").classList.remove("d-none");
+                document.querySelector(".diem").classList.remove("ng-invalid-temp");
+            }
+
+            document.querySelector("#exampleFormControlInput3").onblur = function(){
+                document.querySelector(".test3").classList.remove("d-none");
+                document.querySelector(".email").classList.remove("ng-invalid-temp");
+            }
+
+            document.querySelector("#exampleFormControlInput4").onblur = function(){
+                document.querySelector(".test4").classList.remove("d-none");
+                document.querySelector(".soXe").classList.remove("ng-invalid-temp");
+            }
+            
+            document.querySelector(".btnsave").onclick = function(){
+                document.querySelector(".success").classList.remove("d-none");
+            }
+
+            app.controller("myController", function($scope){
+                
+            });
+        </script>
+    </body>
+</html>

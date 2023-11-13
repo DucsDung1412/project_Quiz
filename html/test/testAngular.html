@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.js"></script>
+    <style>
+        /* input.ng-invalid{
+            color: red;
+        } 
+        form.ng-invalid{
+            color: red;
+        } */
+        /* body {
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+  
+        h1 {
+            color: green;
+        } */
+    </style>
+</head>
+<body ng-app="asd">
+    <div ng-controller="testC">
+        <h1 ng-bind="hello"></h1>
+        <h1>{{obj}}</h1>
+        <h2>{{obj.obj1}}</h1>
+        <h2>{{obj.obj2[1]}}</h1>
+        <img alt="" src= {{img.img}}>
+        <p>{{img.title}}</p>
+        <hr>
+    </div>
+    
+    <div ng-controller="inputText">
+        <span>{{number}}</span> <h1	ng-click="numberUp()">Name:</h1>
+        <input ng-model="name" ng-change=changeText() type="text"> <input ng-click=clickMe() type="button" value={{number}}>
+        <p>{{userName}}</p> 
+        <p ng-hide="!name">{{alertTB}}</p> 
+        <hr>
+        
+        <input type="number" ng-model="valueA">
+        <input type="number" ng-model="valueB">
+        <input type="button" ng-click=sum() value="Tong">
+        <p>{{tong}}</p>
+        <p ng-hide="tong > 0">{{tong}}</p>
+        <hr>
+        
+        <div ng-controller="bai5">
+            <img alt="" src= {{img.img}} >
+            <p>{{img.title}} {{$parent.tong}}</p>
+            <hr>
+            <span>UserName:</span> <input type="text" value={{login.username}}> 
+            <span>PassWord:</span> <input type="text" value={{login.password}}>
+            
+            <p ng-repeat="test in arr">{{test}}</p>
+            <p ng-repeat="asd in obj.arr">{{asd}}</p>
+        </div>
+    </div>
+    
+    <div ng-controller="repeat" class="container">
+        <div class="row row-cols-3 d-flex justify-content-center">
+            <div ng-repeat="card in arrCrad" class="col">
+                <div class="card mt-4">
+                      <img src= {{card.img}} class="card-img-top" alt="...">
+                      <div class="card-body">
+                            <p class="card-text">{{card.title}}</p>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div ng-controller="model_options">
+        <input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="name">
+        <span>{{name}}{{selectedName1}}</span>
+
+        <input type="checkbox" ng-model="genderALL" />
+        <input type="checkbox" ng-model="gender1" ng-checked="genderALL"/>
+        <input type="checkbox" ng-model="gender2" ng-checked="genderALL"/>
+        <input type="checkbox" ng-model="gender3" ng-checked="genderALL"/>
+
+        <input type="radio" value="1" ng-model="gender" />
+        <input type="radio" value="2" ng-model="gender" />
+
+        <select ng-model="selectedName" ng-options="item for item in names"></select>
+        <select ng-model="selectedName1" ng-model-options="{updateOn: 'blur'}" ng-options="y for (x,y) in kjj"></select>
+    </div>
+
+    <div ng-controller="checkErr">
+        <form action="" name="form1">
+            <input name="req" type="text" ng-model="name" ng-model-options="{updateOn: 'blur'}" required>
+            <p ng-hide="form1.req.$valid">Error1</p>
+            <hr>
+
+            <input name="email" type="email" ng-model="email" email>
+            <p ng-hide="form1.email.$valid">Error2</p>
+            <hr>
+
+            <input name="phone" type="text" ng-model="phone" ng-check-phone>
+            <p ng-hide="form1.phone.$error.phoneChecked">Error3</p>
+            <hr>
+
+            <input name="soChan" type="text" ng-model="soChan" so-chan>
+            <p ng-hide="form1.soChan.$error.charE">Error4</p>
+            <hr>
+
+            <h1>asdjzxhcksl</h1>
+        </form>
+    </div>
+
+    <div ng-controller="filter" class="">
+        <ul>
+            <li>
+                Number: {{myNumber}}
+            </li>
+            <li>
+                Number: {{myNumber | number:2}}
+            </li>
+            <li>
+                Currency: {{myNumber | currency:'VND':0}}
+            </li>
+            <li>
+                Number: {{myNumbers | between: 100 : 200}}
+            </li>
+        </ul>
+        <ul>
+            <li>
+                Date: {{myDate}}
+            </li>
+            <li>
+                Date(dd-MM-yyyy): {{myDate | date:"dd-MM-yyyy"}}
+            </li>
+            <li>
+                Date(MM-dd-yyyy): {{myDate | date:"MM-dd-yyyy"}}
+            </li>
+        </ul>
+        <ul>
+            <li>
+                String: {{myString}}
+            </li>
+            <li>
+                UpperCase: {{myString | uppercase}}
+            </li>
+            <li>
+                LowerCase: {{myString | lowercase}}
+            </li>
+            <li>
+                json: {{myString | json:2}}
+            </li>
+            <li>LimitTo: {{myString | limitTo : 3 : 2}}</li>
+            <li>
+                StringForm: {{myString | pretty}}
+            </li>
+        </ul>
+    </div>
+    
+    <!-- angular -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script>
+        var app = angular.module("asd", []);
+        app.controller("testC", function($scope) {
+            $scope.hello = "Hello world";
+            $scope.obj = {
+                            obj1: "OBJ 1" ,
+                            obj2: ["So 1", "So 2"]	
+                         };
+            $scope.img = {
+                            img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                            title: "Agular"
+                          }
+        });
+
+        app.controller("inputText", function($scope) {
+            $scope.changeText = function() {
+                $scope.userName = $scope.name
+            }
+            $scope.number = 0,
+            $scope.numberUp = function() {
+                $scope.number++;
+            }
+            $scope.clickMe = function() {
+                $scope.alertTB = "Xin chao " + $scope.name
+            }
+            $scope.sum = function() {
+                $scope.tong = $scope.valueA + $scope.valueB
+            }
+        });
+        
+        app.controller("bai5", function($scope) {
+            $scope.img = {
+                            img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                            title: "FPT Polytechnic"
+                          };
+            $scope.login = {
+                                username: "FPoly",
+                                password: "Iloveyou"
+                              };
+
+               $scope.arr = [
+                               "Dung",
+                               "Hanh",
+                               {
+                                id: 1,
+                                Name: "Duy"
+                               },
+                               [
+                                1,
+                                2
+                               ]
+                            ];
+
+               $scope.obj = {
+                            id: 1,
+                            Name: "Duy",
+                            arr: [1,2,3,4]
+                            };
+        });
+
+        app.controller("repeat", function($scope) {
+            $scope.arrCrad = [
+                                {
+                                    img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                                    title: "Hinh 1"
+                                },
+                                {
+                                    img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                                    title: "Hinh 2"
+                                },
+                                {
+                                    img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                                    title: "Hinh 3"
+                                },
+                                {
+                                    img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                                    title: "Hinh 4"
+                                },
+                                {
+                                    img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                                    title: "Hinh 5"
+                                },
+                                {
+                                    img: "https://angularjs.org/img/angularjs-for-header-only.svg",
+                                    title: "Hinh 6"
+                                },
+                              ]
+        });
+
+        app.controller('model_options', function($scope) {
+            $scope.names = ["Emil", "Tobias", "Linus"];
+            $scope.kjj = {id: 1,  Name: "Huhu"};
+        });
+
+        app.controller("checkErr", function($scope){
+            
+        });
+
+        app.directive("soChan", function(){
+            return {
+                require: "ngModel",
+                link: function(scope, element, attr, mCtrl){
+                    function fnValidate(value){
+                        if(value % 2 == 0){
+                            mCtrl.$setValidity("charE", true);
+                        } else {
+                            mCtrl.$setValidity("charE", false);
+                        }
+                        return value;
+                    }
+                    mCtrl.$parsers.push(fnValidate);
+                }
+            };
+        });
+
+        app.directive("ngCheckPhone", function(){
+            return{
+                require: "ngModel",
+                link: function(scope, element, attr, mCtrl){
+                    function fnCheckPhone(value){
+                        if(value.length < 6){
+                            mCtrl.$setValidity("phoneChecked", false);
+                        } else {
+                            mCtrl.$setValidity("phoneChecked", true);
+                        }
+                        return value;
+                    }
+                    mCtrl.$parsers.push(fnCheckPhone);
+                }
+            }
+        });
+
+        app.controller("filter", function($scope){
+            $scope.myNumber = 123456.789;
+            $scope.myNumbers = [1,2,3,100,200,111,112,456,199];
+            $scope.myDate = new Date();
+            $scope.myString = "HeLLo dAo DuC DUNg";
+        });
+
+        app.filter("pretty", function(){
+            return  function(input){
+                        var output = input.split(" ");
+                        for(i = 0; i < output.length; i++){
+                            output[i] = output[i].trim().charAt(0).toUpperCase() + output[i].trim().substr(1).toLowerCase();
+                        }
+                        return output.join(" ");
+                    }
+        });
+
+        app.filter("between", function(){
+            return function(input, min, max){
+                var output = [];
+                for(i = 0; i < input.length; i++){
+                    if(input[i] > min && input[i] < max){
+                        output.push(input[i]);
+                    }
+                }
+                return output;
+            }
+        })
+
+        app.controller("testC", function($scope, $http){
+            $scope.list = [];
+            $http.get("http://localhost:3000/posts").then(function(response) {
+                $scope.list = response.data;
+                console.log($scope.list);
+            })  
+        });
+    </script>
+</body>
+</html>

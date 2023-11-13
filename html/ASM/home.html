@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        
+        <!-- fontawesom - icon  -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://kit.fontawesome.com/112b63e1a4.js" crossorigin="anonymous"></script>
+        
+        <!-- Angular  -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.js"></script>
+        
+        <!-- CSS  -->
+        <link rel="stylesheet" href="/css/asm.css">
+    </head>
+
+    <body scroll="yes" ng-app="myApp">
+        <!-- QUIZ -->
+        <div class="container-change d-flex">
+            <div class="quiz-section-temp w-100 bg-quiz">
+                    
+            </div>
+            <div class="quiz-section d-flex justify-content-center align-items-center w-100 bg-quiz text-light d-none" style="height: 100vh;">
+                <!-- QUESTION -->
+                <div class="quiz-box quiz-box-animation position-relative d-flex flex-column m-2">
+                    <h1 class="fs-2 fw-bolder text-center py-1">Codehal Quiz</h1>
+                    <div class="quiz-header fs-6 fw-medium d-flex justify-content-between align-items-center py-4 mb-4">
+                        <span>{{course.title}}</span>
+                        <span class="header-sroce">Score: {{score}} / {{course.listQuestion.length}}</span>
+                    </div>
+                    
+                    <div class="fs-6 fw-medium d-flex justify-content-between align-items-center mb-2">
+                        <div ng-repeat="(x,y) in course.listQuestion | limitTo : 1:numQ">
+                            <h2 class="fs-4 fw-bold">{{y.numb}}. {{y.question}}</h2>
+                        </div>
+                        <span class="header-sroce" style="margin-bottom: 6px;">Thời gian còn lại: <span class="time-out" id="{{timeQuiz}}"></span></span>
+                    </div>
+
+                    <div ng-repeat="(x,y) in course.listQuestion | limitTo : 1:numQ">
+                        <div class="option-list fw-semibold">
+                            <div ng-click="isSelected && checkAnswer(numQ, 0)" class="option w-100 p-3">
+                                <span>{{y.options[0]}}</span>
+                            </div>
+                            <div ng-click="isSelected && checkAnswer(numQ, 1)" class="option w-100 p-3">
+                                <span>{{y.options[1]}}</span>
+                            </div>
+                            <div ng-click="isSelected && checkAnswer(numQ, 2)" class="option w-100 p-3">
+                                <span>{{y.options[2]}}</span>
+                            </div>
+                            <div ng-click="isSelected && checkAnswer(numQ, 3)" class="option w-100 p-3">
+                                <span>{{y.options[3]}}</span>
+                            </div>
+                        </div>
+        
+                        <div class="quiz-footer pt-4 mt-4 fs-6 fw-medium d-flex justify-content-between align-items-center">
+                            <span class="question-total">{{y.numb}} of {{course.listQuestion.length}} Questions</span>
+                            <button ng-click="nextQuestion()" class="next-btn fs-6 fw-medium">Next</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RESULT -->
+                <div class="result-box d-flex flex-column align-items-center d-none m-2">
+                    <h2 class="fs-1 fw-bolder">Quiz Result</h2>
+                    <div class="result-mark d-flex flex-column align-items-center">
+                        <div class="circular-progress d-flex align-items-center justify-content-center">
+                            <span class="progress-value fs-1 fw-bold">0%</span>
+                        </div>
+                        <span class="score-text fs-4 fw-bolder mt-3">Your Socre {{score}} out of {{course.listQuestion.length}}</span>
+                    </div>
+    
+                    <div class="buttons d-flex">
+                        <button ng-click="btnTryAgain()" class="btn-tryAgain fs-6 fw-semibold mx-4 mb-3">Try Again</button>
+                        <button ng-click="btnGoHome()" class="btn-goHome fs-6 fw-semibold mx-4 mb-3 px-2"><a href="#!home" class="text-decoration-none" style="color: #fff">Go To Home</a></button>
+                    </div>
+                </div>
+            </div>   
+        </div>
+
+        <!-- APP -->
+        <div class="app">
+            <!-- HEADER -->
+            <main class="main position-relative z-3">
+                <header class="header">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent" aria-label="Ninth navbar example">
+                        <div class="container-xl pt-1">
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07XL" aria-controls="navbarsExample07XL" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <a class="logo navbar-brand fs-3 fw-bolder text" href="#">Quiz</a>
+                        
+                            <div class="collapse navbar-collapse" id="navbarsExample07XL">
+                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-6 fw-medium text">
+                                    <li class="nav-item mx-2">
+                                        <a id="home" class="nav-link active" aria-current="page" href="#">Home</a>
+                                    </li>
+                                    <li class="nav-item mx-2">
+                                        <a class="nav-link" aria-current="page" href="#">About</a>
+                                    </li>
+                                    <li class="nav-item mx-2">
+                                        <a class="nav-link" href="#">Contact</a>
+                                    </li>
+                                    <li class="nav-item mx-2">
+                                        <a class="nav-link" href="#">FAQS</a>
+                                    </li>
+                                    <li class="nav-item nav-btn mr-2 mb-2">
+                                        <button type="button" class="btn-login btn login me-2" data-bs-toggle="modal" data-bs-target="#signin-modal">Login</button>
+                                    </li>
+                                </ul>
+                                
+                                <div class="mx-2 login-active dropdown text-start d-noneF d-none">
+                                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://cartzilla.createx.studio/img/nft/vendor/avatar-square.jpg" alt="mdo" width="32" height="32" class="rounded-circle">
+                                    </a>
+                                    <ul class="dropdown-menu text-small">
+                                        <li><a class="dropdown-item btn-profile" href="#">Profile Settings</a></li>
+                                        <li><a class="dropdown-item btn_changePassowrd" href="#">Change Password</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item btn-out" href="">Sign out</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class=""></div>
+                        </div>
+                    </nav>
+                </header>
+    
+                <section class="homeStart home d-flex justify-content-center align-items-center">
+                    <div class="home-content text-center text-light">
+                        <h1 class="fw-bolder">Quiz Website</h1>
+                        <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, est deleniti voluptatum, 
+                            eveniet debitis expedita ducimus asperiores rem repellendus impedit deserunt aperiam quo 
+                            dolorum maxime consequatur animi minus facere iure?</p>
+                        <button id="startQz" type="button" class="btn btn-mainPrimary btn-lg"><a href="#!home" class="text-decoration-none" style="color: #fff;">Start Quiz</a></button>
+                    </div>
+                </section>
+            </main>
+            
+            <!-- BODY -->
+            <main class="element-body container mt-2 d-none" ng-controller="controllerCourse">
+                <div class="row g-5">
+                    <div class="col-md-12 col-lg-8">
+                        <h3 class="pb-4 mb-4 fst-italic border-bottom position-sticky z-2 pt-2" style="top: 0rem; background: white;">
+                            Danh mục môn học
+                        </h3>
+                        
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4 mb-4" ng-repeat="(x,y) in listCourse | limitTo : 3:page">
+                                <div class="card shadow h-100">
+                                    <!-- Image -->
+                                    <img src="{{y.image}}" class="card-img-top" alt="course image">
+                                    <div class="card-body pb-0">
+                                        <!-- Badge and favorite -->
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <a ng-if="y.badge == 'Beginner'" href="#" class="text-decoration-none badge bg-success bg-opacity-10 text-success">{{y.badge}}</a>
+                                            <a ng-if="y.badge == 'All level'" href="#" class="text-decoration-none badge bg-purple bg-opacity-10 text-purple">{{y.badge}}</a>
+                                            <a href="#" class="{{y.heart_color}}"><i class="{{y.heart}} fa-heart"></i></a>
+                                        </div>
+                                        <!-- Title -->
+                                        <h5 class="card-title fw-normal"><a class="title--Card fw-bold change-info text-decoration-none" href="#!{{x + page}}/{{x + page}}">{{y.title}}</a></h5>
+                                        <p class="mb-2 text-truncate-2">{{y.describe}}</p>
+                                        <!-- Rating star -->
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item me-0 small"><i class="{{y.star[0]}} text-warning"></i></li>
+                                            <li class="list-inline-item me-0 small"><i class="{{y.star[1]}} text-warning"></i></li>
+                                            <li class="list-inline-item me-0 small"><i class="{{y.star[2]}} text-warning"></i></li>
+                                            <li class="list-inline-item me-0 small"><i class="{{y.star[3]}} text-warning"></i></li>
+                                            <li class="list-inline-item me-0 small"><i class="{{y.star[4]}} text-warning"></i></li>
+                                            <li class="list-inline-item ms-2 h6 fw-light mb-0">{{y.star[5]}}</li>
+                                        </ul>
+                                    </div>
+                                    <!-- Card footer -->
+                                    <div class="card-footer pt-0 pb-3">
+                                        <hr>
+                                        <div class="d-flex justify-content-between ">
+                                            <span class="h6 fw-light mb-0"><i class="far fa-clock text-danger me-2"></i>{{y.time}}</span>
+                                            <span class="h6 fw-light mb-0"><i class="fas fa-table text-orange me-2"></i>{{y.listQuestion.length}} question</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center mt-2">
+                                <li class="page-item"><a class="page-link" href="#" ng-click="changePage(first)">Previous</a></li>
+                                <li class="page-item" ng-repeat="(x,y) in listCourse"><a class="page-link" href="#" ng-if="x*3 - listCourse.length < 3 && x!=0" ng-click="changePage(x)">{{x}}</a></li>
+                                <li class="page-item"><a class="page-link" href="#" ng-click="changePage(last())">Next</a></li>
+                            </ul>
+                        </nav>
+            
+                    </div>
+              
+                    <div class="col-md-12 col-lg-4">
+                        <div class="position-sticky" style="top: 2rem;">
+                            <div class="p-4">
+                                <h4 class="fst-italic text-center">Filters</h4>
+                                <ul class="nav nav-pills text-center justify-content-between">
+                                    <li class="my-2 nav-item mx-2 col-3">
+                                        <a style="padding: 6px 0;" class="nav-link active rounded-pill" aria-current="page" href="#">ALL</a>
+                                    </li>
+                                    <li class="my-2 nav-item mx-2 col-3" ng-repeat="x in badges">
+                                        <a class="nav-link rounded-pill" href="#">{{x}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- NG-VIEW -->
+            <div class="viewNG" ng-view></div>
+
+            <!-- PROFILE -->
+            <div class="myProfile container mb-5 pt-4 pb-1 d-none">
+                <div class="myProfileOwn bg-light shadow-lg rounded-3 overflow-hidden">
+                    <div class="row">
+                        <!-- Sidebar-->
+                        <aside class="col-lg-3 pe-xl-5">
+                            <!-- Account menu toggler (hidden on screens larger 992px)-->
+                            <div class="d-block d-lg-none p-4"><a class="btn btn-outline-accent d-block" href="#account-menu" data-bs-toggle="collapse"><i class="ci-menu me-2"></i>Account menu</a></div>
+                            <!-- Actual menu-->
+                            <div class="h-100 border-end mb-2">
+                                <div class="d-lg-block collapse" id="account-menu">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="border-bottom mb-0"><a class="btn_profile nav-link-style text-decoration-none d-flex align-items-center px-4 py-3" href="#"><i class="fa-solid fa-gear fa-lg me-2"></i>Profile Settings</a></li>
+                                    <li class="border-bottom mb-0"><a class="btn_changePassowrd nav-link-style text-decoration-none d-flex align-items-center px-4 py-3" href="#"><i class="fa-solid fa-key fa-lg me-2"></i>Change Password<span class="fs-sm text-muted ms-auto"></span></a></li>
+                                    <li class="border-bottom mb-0"><a class="nav-link-style text-decoration-none d-flex align-items-center px-4 py-3" href="#"><i class="fa-solid fa-list fa-lg me-2"></i>My Course<span class="fs-sm text-muted ms-auto">2</span></a></li>
+                                    <li class="border-bottom mb-0"><a class="nav-link-style text-decoration-none d-flex align-items-center px-4 py-3" href="#"><i class="fa-regular fa-heart fa-lg me-2"></i>Favorites<span class="fs-sm text-muted ms-auto">3</span></a></li>
+                                    <li class="border-bottom mb-0"><a class="nav-link-style text-decoration-none d-flex align-items-center px-4 py-3" href="#"><i class="fa-regular fa-bell fa-lg me-2"></i>Notifications</a></li>
+                                    <li class="border-bottom mb-0"><a class="btn-out nav-link-style text-decoration-none d-flex align-items-center px-4 py-3" href="#"><i class="fa-solid fa-arrow-right-from-bracket fa-rotate-180 fa-lg me-2"></i>Sign out</a></li>
+                                </ul>
+                                </div>
+                            </div>
+                        </aside>
+                        <!-- Content-->
+                        <section class="col-lg-9 pt-lg-4 pb-4 mb-3">
+                            <!-- PROFILE SETTING -->
+                            <div class="profile_setting pt-2 px-4 ps-lg-0 pe-xl-5">
+                                <h1 class="h3 mb-4 pt-2 text-center text-sm-start">Profile Settings</h1>
+                                <div class="bg-body-secondary rounded-3 p-4 mb-4 text-center text-sm-start">
+                                    <div class="d-flex flex-sm-row flex-column align-items-sm-start align-items-center"><img class="rounded mb-sm-0 mb-3" src="https://cartzilla.createx.studio/img/nft/vendor/avatar-square.jpg" width="90" alt="Createx Studio">
+                                        <div class="ms-n2 ps-sm-4">
+                                            <button class="btn btn-outline-accent mb-2 ms-2" type="button"><i class="fa-solid fa-arrows-rotate fa-lg me-2"></i>Change <span class="d-none d-sm-inline">avatar</span></button>
+                                            <button class="btn btn-outline-danger mb-2 ms-2" type="button"><i class="fa-solid fa-trash-can fa-lg me-2"></i>Delete</button>
+                                            <div class="pt-1 mb-0 fs-sm text-muted">We recommend an image of at least 400x400. Gifs work too :)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form ng-controller="updateProfile">
+                                    <div class="row gy-3 mb-4 pb-md-3 mb-2">
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-name">Full name</label>
+                                            <input class="form-control" id="profile-name" type="text" value="{{student.profile.fullname}}" placeholder="Example">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-username">Username</label>
+                                            <input class="form-control" id="profile-username" type="text" placeholder="@enter_name" value="{{student.profile.username}}">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-uid">UID</label>
+                                            <input class="form-control" id="profile-uid" type="text" value="{{student.id}}" disabled>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-email">Email</label>
+                                            <input class="form-control" id="profile-email" type="email" value="{{student.email}}" disabled>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label" for="profile-bio">Short bio</label>
+                                            <textarea class="form-control" id="profile-bio" rows="4" placeholder="Tell about yourself in few words"></textarea><span class="form-text">0 of 500 characters used.</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="h5 mb-3">Social media profiles</h3>
+                                    <div class="row gy-3 mb-4 pb-2">
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-website">Website</label>
+                                            <input class="form-control" id="profile-website" type="url" placeholder="Enter URL">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-twitter">Twitter</label>
+                                            <input class="form-control" id="profile-twitter" type="url" placeholder="Enter URL">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-facebook">Facebook</label>
+                                            <input class="form-control" id="profile-facebook" type="url" placeholder="Enter URL">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="profile-instagram">Instagram</label>
+                                            <input class="form-control" id="profile-instagram" type="url" placeholder="Enter URL">
+                                        </div>
+                                        <div class="col-12"><a style="color: #fe696a;" href="#"><i class="fa-solid fa-plus fa-lg me-2"></i><ins>Add more</ins></a></div>
+                                    </div>
+                                    <!-- Submit-->
+                                    <div class="d-flex flex-sm-row flex-column">
+                                        <button class="btn btn-mainPrimary" type="submit" ng-click="btnUpdateProfile()">Update profile</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="change_passowrd ps-md-3 ps-lg-0 mx-3 pt-md-4 pb-md-2 d-none">
+                                <h1 class="h2 pt-xl-1 pb-3">Change Password</h1>
+                
+                                <h2 class="h5 mb-4 text-read">Password</h2>
+                                <form class="needs-validation border-bottom pb-3 pb-lg-4" novalidate="">
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-4">
+                                            <label for="cp" class="form-label fs-base">Current password</label>
+                                            <div class="password-toggle">
+                                                <input type="password" id="cp" class="form-control form-control-lg now-password" value="{{student.password}}" required="">
+                                                <label class="password-toggle-btn">
+                                                    <i class="fa-solid fa-eye fa-sm"></i>
+                                                    <i class="fa-solid fa-eye-slash fa-sm d-none"></i>
+                                                </label>
+                                                <div class="invalid-tooltip position-absolute top-100 start-0">Incorrect password!</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <div class="col-sm-6 mb-4">
+                                            <label for="np" class="form-label fs-base ">New password</label>
+                                            <div class="password-toggle">
+                                                <input type="password" id="np" class="form-control form-control-lg new-password" required="">
+                                                <label class="password-toggle-btn">
+                                                    <i class="fa-solid fa-eye fa-sm"></i>
+                                                    <i class="fa-solid fa-eye-slash fa-sm d-none"></i>
+                                                </label>
+                                                <div class="invalid-tooltip position-absolute top-100 start-0">Incorrect password!</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 mb-4">
+                                            <label for="cnp" class="form-label fs-base">Confirm new password</label>
+                                            <div class="password-toggle">
+                                                <input type="password" id="cnp" class="form-control form-control-lg confirm-password" required="">
+                                                <label class="password-toggle-btn">
+                                                    <i class="fa-solid fa-eye fa-sm"></i>
+                                                    <i class="fa-solid fa-eye-slash fa-sm d-none"></i>
+                                                </label>
+                                                <div class="invalid-tooltip position-absolute top-100 start-0">Incorrect password!</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3" ng-controller="settingPassword">
+                                        <button type="reset" class="btn bg-gradient-pink-secon me-3">Cancel</button>
+                                        <button type="submit" class="btn bg-gradient-pink" style="width: 140px;" ng-click="changePassWord()">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!-- FORGOT PASSWORD -->
+                <div class="row justify-content-center mt-4 myForgotPassWord d-none" ng-controller="controllerForgotPassword">
+                    <div class="col-lg-8 col-md-10">
+                        <h2 class="h3 mb-4">Forgot your password?</h2>
+                        <p class="fs-md">Change your password in three easy steps. This helps to keep your new password secure.</p>
+                        <ol class="list-unstyled fs-md">
+                            <li><span class="text-read me-2">1.</span>Fill in your email address below.</li>
+                            <li><span class="text-read me-2">2.</span>We'll email you a temporary code.</li>
+                            <li><span class="text-read me-2">3.</span>Use the code to change your password on our secure website.</li>
+                        </ol>
+                        <div class="card py-2 mt-4">
+                            <form class="card-body needs-validation forgotPassowrd" novalidate="">
+                                <div class="mb-3 form-group">
+                                    <label class="form-label" for="recover-email">Enter your email address</label>
+                                    <input class="form-control email-forgot" type="text" id="recover-email">
+                                    <div class="invalid-feedback">  </div>
+                                </div>
+                                <button class="btn btn-mainPrimary fs-6" type="submit" ng-click="getPassword()">Get new password</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FOOTER -->
+            <main class="element-footer mainF mt-5 pt-5 d-none">
+                <div class="container text-light">
+                    <footer class="pt-2 pb-5">
+                        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                          <li class="nav-item m-3"><a href="#" class="nav-link px-2 text-light">Home</a></li>
+                          <li class="nav-item m-3"><a href="#" class="nav-link px-2 text-light">Features</a></li>
+                          <li class="nav-item m-3"><a href="#" class="nav-link px-2 text-light">Pricing</a></li>
+                          <li class="nav-item m-3"><a href="#" class="nav-link px-2 text-light">FAQs</a></li>
+                          <li class="nav-item m-3"><a href="#" class="nav-link px-2 text-light">About</a></li>
+                        </ul>
+                        <p class="mb-0 text-center text-light">© 2023 Company, Inc</p>
+                    </footer>
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="reminderQesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-body p-4 px-5" ng-controller="quiz">
+                        <h1 class="text-read fw-bold mb-0">Quiz Guide</h1>
+                
+                        <ul class="d-grid gap-4 mt-4 list-unstyled small" style="display: block !important;">
+                            <li class="d-flex gap-4">
+                                <p class="fs-6 ">
+                                    1. Not into lists? Try the new grid view.
+                                </p>
+                            </li>
+                            <li class="d-flex gap-4">
+                                <p class="fs-6 ">
+                                    2. Save items you love for easy access later.
+                                </p>
+                            </li>
+                            <li class="d-flex gap-4">
+                                <p class="fs-6 ">
+                                    3. Share videos wherever you go.
+                                </p>
+                            </li>
+                            <li class="d-flex gap-4">
+                                <p class="fs-6 ">
+                                    4. Share videos wherever you go.
+                                </p>
+                            </li>
+                            <li class="d-flex gap-4">
+                                <p class="fs-6 ">
+                                    5. Share videos wherever you go.
+                                </p>
+                            </li>
+                        </ul>
+
+                        <div class="d-flex justify-content-between border-top pt-4">
+                            <button type="button" class="btn bg-gradient-pink-secon" data-bs-dismiss="modal" style="width: 110px">Exit Quiz</button>
+                            <button ng-click="startQ()" id="startQuiz" type="button" class="btn bg-gradient-pink" data-bs-dismiss="modal" style="width: 100px;">Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="exampleModalLabe2" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-header" style="padding: 12px 10px 0px 10px; background-color: #efe1ec;">
+                        <ul class="nav nav-headtabs card-header-tabs" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="modal-singIn modal-hover nav-link fw-medium active" href="#signin-tab" data-bs-toggle="tab" role="tab" aria-selected="true"><i class="fa-solid fa-lock fa-sm me-2"></i>Sign in</a></li>
+                            <li class="nav-item" role="presentation"><a class="modal-singUp modal-hover nav-link fw-medium" href="#signup-tab" data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1"><i class="fa-solid fa-user fa-sm me-2"></i>Sign up</a></li>
+                        </ul>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" style="outline: none;"></button>
+                    </div>
+                    <div class="modal-body tab-content py-4">
+                        <!-- Sign In -->
+                        <form class="tab-singIn needs-validation tab-pane fade show active" autocomplete="off" novalidate="" id="signin-tab" role="tabpanel" ng-controller="controllerSI">
+                            <div class="mb-3 form-group">
+                                <label class="form-label" for="si-email">Email address</label>
+                                <input class="form-control" type="text" id="si-email" placeholder="example@example.com" ng-model="email" ng-blur="onBlur()">
+                                <div class="invalid-feedback">  </div>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label class="form-label" for="si-password">Password</label>
+                                <div class="password-toggle">
+                                    <input class="form-control" type="password" id="si-password" required="" ng-model="password" ng-blur="onBlur()">
+                                    <label class="password-toggle-btn">
+                                        <i class="fa-solid fa-eye fa-sm"></i>
+                                        <i class="fa-solid fa-eye-slash fa-sm d-none"></i>
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback">  </div>
+                            </div>
+                            <div class="mb-3 d-flex flex-wrap justify-content-between">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input form-check-input-custom" type="checkbox" id="si-remember">
+                                    <label class="form-check-label" for="si-remember">Remember me</label>
+                                </div>
+                                <a class="forgot fs-sm text-decoration-none text-dark" href="#" data-bs-dismiss="modal">Forgot password?</a>
+                            </div>
+                            <button class="btn btn-mainPrimary btn-shadow d-block w-100 btn-SignInErr1" type="submit">Sign in</button>
+                            <button class="btn btn-mainPrimary btn-shadow d-block w-100 btn-SignIn btn-SignInErr2 d-none" type="submit">Sign in</button>
+                            <button class="btn btn-mainPrimary btn-shadow d-block w-100 btn-SignIn btn-SignInSucc d-none" type="submit" data-bs-dismiss="modal">Sign in</button>
+                        </form>
+                        <!-- Sign Up -->
+                        <form class="tab-singUp needs-validation tab-pane fade" autocomplete="off" novalidate="" id="signup-tab" role="tabpanel" ng-controller="controllerSU">
+                            <div class="mb-3 form-group">
+                                <label class="form-label" for="su-name">Full name</label>
+                                <input class="form-control" type="text" id="su-name" placeholder="Example" required="" ng-model="fullname">
+                                <div class="invalid-feedback">  </div>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="su-email">Email address</label>
+                                <input class="form-control" type="text" id="su-email" placeholder="Example@example.com" required="" ng-model="email">
+                                <div class="invalid-feedback">  </div>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label class="form-label" for="su-password">Password</label>
+                                <div class="password-toggle">
+                                    <input class="form-control" type="password" id="su-password" required="" ng-model="password">
+                                    <label class="password-toggle-btn">
+                                        <i class="fa-solid fa-eye fa-sm"></i>
+                                        <i class="fa-solid fa-eye-slash fa-sm d-none"></i>
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback">  </div>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label class="form-label" for="su-password-confirm">Confirm password</label>
+                                <div class="password-toggle">
+                                    <input class="form-control" type="password" id="su-password-confirm" required="" ng-model="passwordConfirm">
+                                    <label class="password-toggle-btn">
+                                        <i class="fa-solid fa-eye fa-sm"></i>
+                                        <i class="fa-solid fa-eye-slash fa-sm d-none"></i>
+                                    </label>
+                                </div>
+                                <div class="invalid-feedback">  </div>
+                            </div>
+                            <button class="btn btn-primary btn-shadow d-block w-100 btn-mainPrimary btn-signUpErr" type="submit">Sign up</button>
+                            <button class="btn btn-primary btn-shadow d-block w-100 btn-mainPrimary btn-signUpSucc d-none" type="submit" ng-click="checkStudent()">Sign up</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+        <script src="/js/asm.js"></script>
+        <script src="/js/validation.js"></script>
+        <script>
+			Validator({
+				workplace: ".tab-singIn",
+				formGroupSelector: '.form-group',
+				rules: [
+					Validator.isRequired("#si-email", "Please provide a valid email address."),
+					Validator.isEmail("#si-email", "Please provide a valid email address."),
+					Validator.isRequired("#si-password", "Please provide a valid password.")
+				]
+			});
+
+            Validator({
+				workplace: ".tab-singUp",
+				formGroupSelector: '.form-group',
+				rules: [
+                    Validator.isRequired("#su-name", "Please fill in your name."),
+					Validator.isRequired("#su-email", "Please provide a valid email address."),
+					Validator.isEmail("#su-email", "Please provide a valid email address."),
+					Validator.isRequired("#su-password", "Please provide a valid password."),
+					Validator.isLengthMin("#su-password", 6, "Password must have at least 6 characters."),
+					Validator.isRequired("#su-password-confirm", "Please provide a valid password confirm."),
+					Validator.isLengthMin("#su-password-confirm", 6, "Password confirm must have at least 6 characters."),
+					Validator.isConfirm("#su-password-confirm", function() {
+						return document.querySelector("#su-password").value
+					})
+				]
+			});
+
+            Validator({
+				workplace: ".forgotPassowrd",
+				formGroupSelector: '.form-group',
+				rules: [
+					Validator.isEmail("#recover-email", "Please provide a valid email address.")
+				]
+			});
+		</script>
+    </body>
+</html>

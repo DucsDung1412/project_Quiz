@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.js"></script>
+</head>
+<body ng-app="myApp">
+    <div class="" ng-controller="myController">
+        <nav ng-include="'include.html'"></nav>
+        <!-- <nav ng-include="'../lab7/include.html'"></nav> -->
+    </div>
+
+    <a href="#!/">ORTHER</a>
+    <a href="#!1">RED</a>
+    <a href="#!2/poly/3/hihi/2">BLUE</a>
+
+    <div ng-view></div>
+
+    <script>
+        var app = angular.module("myApp", ["ngRoute"]);
+        app.controller("myController",function($scope){
+            $scope.name = "Dao Duc Dung"
+        });
+        app.config(function($routeProvider){
+            $routeProvider.when("/", {
+                template: "<h1>FPT Polytechnic</h1>"
+            }).when("/1", {
+                templateUrl: "red.html?" + Math.random(),
+                controller : "redCtrl",
+                controllerAs: "red"
+            }).when("/2/:name/:port/:name1/:port1", {
+                templateUrl: "blue.html",
+                controller : "blueCtrl"
+            })
+        });
+        app.controller("redCtrl", function () {
+            this.msg = "FPT Polytechnic";
+        });
+        app.controller("blueCtrl", function ($scope, $routeParams, $route) {
+            console.log($routeParams)
+            $scope.msg = "FPT Polytechnic";
+            $scope.reload = function(){
+                $route.updateParams({name: "Dao Duc Dung"});
+                $scope.msg = "Dao Duc Dung"
+            }
+        });
+    </script>
+    <!-- angular -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/poly.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    </head>
+    <body>
+        <div class="container" ng-app="myApp">
+            <div class="row justify-content-center align-items-center" ng-controller="myController">
+                <div class="col-lg-4 text-center">
+                    <img src="{{info.photo}}" alt="">
+                    <h2 class="fw-normal">Họ và tên: {{info.fullname}}</h2>
+                    <p>Ngày sinh: {{info.birthday}}</p>
+                    <p>Giới tính: {{info.gender}}</p>
+                    <p>Điểm trung bình{{info.mark}}</p>
+                  </div>
+            </div>
+        </div>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+        <script>
+            var app = angular.module("myApp", []);
+            app.controller("myController", function($scope){
+                $scope.info = {
+                    fullname: "Đào Đức Dũng",
+                    birthday: "14-12-2000",
+                    gender: "Nam",
+                    mark: 9.9,
+                    photo: "/img/1001.jpg"
+                }
+            });
+        </script>
+    </body>
+</html>

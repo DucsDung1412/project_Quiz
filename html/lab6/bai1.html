@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/poly.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    </head>
+    <body>
+        <div class="container mt-3" ng-app="myApp">
+            <div class="card border-dark mb-3" ng-controller="myController">
+                <div class="card-header bg-secondary-subtle border-dark">TÍNH THƯỞNG TẾT NGUYÊN ĐÁN</div>
+                <div class="card-body text-dark">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Họ và tên</label>
+                        <input ng-model="fullname" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Nguyễn Văn A">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput2" class="form-label">Lương</label>
+                        <div class="input-group mb-3">
+                            <input ng-model="salary" id="exampleFormControlInput2" type="number" class="form-control" aria-label="Amount (to the nearest dollar)">
+                            <span class="input-group-text">VNĐ</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Giới tính</label>
+                        <div class="input-group mb-3">
+                            <div class="form-check">
+                                <input ng-model="gender" value="Nam" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Nam
+                                </label>
+                            </div>
+                            <div class="form-check ms-4">
+                                <input ng-checked="true" ng-model="gender" value="Nu" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Nữ
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Độ tuổi</label>
+                        <div class="input-group mb-3">
+                            <select class="form-select" aria-label="Default select example" ng-model="age" ng-options="y.age for (x,y) in ages">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-secondary-subtle border-dark">TIỀN THƯỞNG: {{getBonus() | number:2}} VNĐ</div>
+              </div>
+        </div>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+        <script>
+            var app = angular.module("myApp",[]);
+            app.controller("myController", function($scope){
+                $scope.gender = "Nu";
+                $scope.ages = [
+                    {
+                        age: "Duới 25",
+                        rate: 0.07
+                    },
+                    {
+                        age: "Từ 25 đến 40",
+                        rate: 0.1
+                    },
+                    {
+                        age: "Trên 40",
+                        rate: 0.15
+                    }
+                ];
+                $scope.getBonus = function(){
+                    if($scope.age){
+                        var bonus = $scope.salary + $scope.salary * $scope.age.rate;
+                        if($scope.gender === "Nu"){
+                            bonus = bonus + 200000;
+                        }
+                        return bonus;
+                    }
+                    return 0;
+                }
+            });
+        </script>
+    </body>
+</html>

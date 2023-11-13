@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/poly.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    </head>
+    <body>
+        <div class="container" ng-app="myApp">
+            <div class="" ng-controller="controller1">
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Họ và tên</label>
+                    <input ng-model="$parent.student.fullname" type="text" class="form-control" id="exampleFormControlInput1" placeholder="...">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput2" class="form-label">Ngày sinh</label>
+                    <input ng-model="$parent.student.birthday" type="text" class="form-control" id="exampleFormControlInput2" placeholder="20-01-1995">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput3" class="form-label">Điểm</label>
+                    <input ng-model="$parent.student.mark" type="number" class="form-control" id="exampleFormControlInput3" placeholder="8.5">
+                </div>
+                <div class="mb-3" ng-init="$parent.index = -1">
+                    <button ng-click="new()" type="button" class="btn btn-secondary">Mới</button>
+                    <button ng-disabled="!$parent.student.mark || !$parent.student.fullname || !$parent.student.birthday" ng-click="save()" type="button" class="btn btn-primary">Lưu</button>
+                    <button ng-disabled="!$parent.student.mark || !$parent.student.fullname || !$parent.student.birthday || $parent.index === -1" ng-click="delete()" type="button" class="btn btn-primary">Xóa</button>
+                    <button ng-click="cancel()" type="button" class="btn btn-secondary">Hủy</button>
+                </div>
+            </div>
+        
+            <br>
+
+            <table class="table" style="width: 500px;" ng-controller="controller2">
+                <thead>
+                    <tr>
+                        <th scope="col">Họ và tên</th>
+                        <th scope="col">Ngày sinh</th>
+                        <th scope="col" colspan="2">Điểm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="student in students">
+                        <th scope="row">{{student.fullname}}</th>
+                        <td>{{student.birthday}}</td>
+                        <td>{{student.mark}}</td>
+                        <td ng-if="student.mark < 5">Yếu / Kém</td>
+                        <td ng-if="student.mark > 8">Giỏi / Xuất sắc</td>
+                        <td ng-if="student.mark >= 5 && student.mark <= 8">Trung bình / Khá</td>
+                        <td><a class="text-decoration-none" href="" ng-click="edit($index)">Sửa</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+        <script>
+            var app = angular.module("myApp", []);
+            app.controller("controller1", function($scope){
+                $scope.save = function(){
+                    for(var i = 0; i < $scope.$parent.students.length; i++){
+                        if($scope.$parent.student.fullname === $scope.$parent.students[i].fullname){
+                            $scope.$parent.students[i] = angular.copy($scope.$parent.student);
+                            break;
+                        } else {
+                            if(i === $scope.$parent.students.length - 1){
+                                $scope.$parent.index = i+1;
+                                $scope.$parent.students.push($scope.$parent.student);
+                            }
+                        }
+                    }
+                }
+
+                $scope.new = function(){
+                    $scope.$parent.student = {};
+                    $scope.$parent.index = -1;
+                }
+
+                $scope.delete = function(){
+                    for(var i = 0; i < $scope.$parent.students.length; i++){
+                        if($scope.$parent.student.fullname === $scope.$parent.students[i].fullname){
+                            $scope.$parent.students.splice(i, 1);
+                            $scope.new();
+                            break;
+                        }
+                    }
+                }
+
+                $scope.cancel = function(){
+                    if($scope.$parent.index < 0){
+                        $scope.new();
+                    } else {
+                        $scope.$parent.student = angular.copy($scope.$parent.students[$scope.$parent.index]);
+                    }
+                }
+            });
+
+            app.controller("controller2", function($scope){
+                $scope.$parent.students = [
+                    {
+                        fullname: "Dao Duc Dung",
+                        birthday: "14-12-2000",
+                        mark: 10
+                    },
+                    {
+                        fullname: "Vo Thi My Hanh",
+                        birthday: "14-03-2001",
+                        mark: 8
+                    }
+                ]
+
+                $scope.edit = function(index){
+                    $scope.$parent.index = index;
+                    $scope.$parent.student = angular.copy($scope.$parent.students[index]);
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/poly.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    </head>
+    <body>
+        <div class="container mt-3" ng-app="myApp">
+            <div class="card border-dark mb-3" ng-controller="myController">
+                <div class="card-header bg-secondary-subtle border-dark">DANH SÁCH HÀNG HÓA</div>
+                <input type="text" ng-model="input">
+                <div class="card-body text-dark">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" ng-click="order('name')">SẢN PHẨM</th>
+                                <th scope="col" ng-click="order('price')">ĐƠN GIÁ</th>
+                                <th scope="col" ng-click="order('discount')">GIẢM GIÁ</th>
+                                <th scope="col" ng-click="order('date')">NGÀY</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="y in list | filter: input |orderBy : value | limitTo : 8:page">
+                            <tr>
+                                <td scope="row">{{y.name | uppercase}}</td>
+                                <td>{{y.price | currency}}</td>
+                                <td>{{y.discount | percentage : 2}}</td>
+                                <td>{{y.date | date : "MMMM-dd, yyyy"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-secondary-subtle border-dark">
+                    <nav aria-label="Page navigation example" class="d-flex justify-content-center align-items-center flex-wrap">
+                        <ul class="pagination mb-1 justify-content-center">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous" ng-click="changePage(first)">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="pagination mb-1 justify-content-center" ng-repeat="(x,y) in list">
+                            <li class="page-item"><a class="page-link" href="#" ng-if="x*8 - list.length < 8 && x!=0" ng-click="changePage(x)">{{x}}</a></li>
+                        </ul>
+                        <ul class="pagination mb-1 justify-content-center">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next" ng-click="changePage(last())">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+              </div>
+        </div>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+        <script>
+            var app = angular.module("myApp",[]);
+            app.controller("myController", function($scope){
+                $scope.list =   [
+                                    { "name": "Aniseed Syrup", "price": 190, "discount": 0.1978, "date": "2000-03-16" },
+                                    { "name": "Change", "price": 19, "discount": 0.178, "date": "1982-12-18" },
+                                    { "name": "Aniseed Syrup", "price": 10, "discount": 0, "date": "1973-06-14" },
+                                    { "name": "Chef Anton\u0027s Cajun Seasoning", "price": 22, "discount": 0, "date": "1976-03-10" }, 
+                                    { "name": "Chef Anton\u0027s Gumbo Mix", "price": 21.35, "discount": 0, "date": "1978-12-06" }, 
+                                    { "name": "Grandma\u0027s Boysenberry Spread", "price": 25, "discount": 0.03, "date": "1981-09-03" }, 
+                                    { "name": "Uncle Bob\u0027s Organic Dried Pears", "price": 30, "discount": 0.03, "date": "1983-03-13" }, 
+                                    { "name": "Northwoods Cranberry Sauce", "price": 40, "discount": 0.04, "date": "1972-02-26" }, 
+                                    { "name": "Mishi Kobe Niku", "price": 97, "discount": 0.1, "date": "1985-12-10" }, 
+                                    { "name": "Ikura", "price": 31, "discount": 0.03, "date": "1994-03-23" }, 
+                                    { "name": "Queso Cabrales", "price": 21, "discount": 0, "date": "1985-11-28" }, 
+                                    { "name": "Queso Manchego La Pastora", "price": 38, "discount": 0.04, "date": "1988-08-27" }, 
+                                    { "name": "Konbu", "price": 6, "discount": 0.5, "date": "2002-07-01" }, 
+                                    { "name": "Tofu", "price": 23.25, "discount": 0, "date": "2002-06-24" }, 
+                                    { "name": "Genen Shouyu", "price": 15.5, "discount": 0, "date": "1991-05-04" }, 
+                                    { "name": "Pavlova", "price": 17.45, "discount": 0, "date": "1996-11-09" }, 
+                                    { "name": "Alice Mutton", "price": 39, "discount": 0.04, "date": "2007-12-15" }, 
+                                    { "name": "Carnarvon Tigers", "price": 62.5, "discount": 0.06, "date": "2011-04-13" }, 
+                                    { "name": "Teatime Chocolate Biscuits", "price": 9.2, "discount": 0.5, "date": "2005-02-02" }, 
+                                    { "name": "Sir Rodney\u0027s Marmalade", "price": 81, "discount": 0.08, "date": "2007-11-01" }, 
+                                    { "name": "Sir Rodney\u0027s Scones", "price": 10, "discount": 0, "date": "2010-07-29" }, 
+                                    { "name": "Gustaf flower", "price": 21, "discount": 0, "date": "2008-12-01" },
+                                    { "name": "Tunnbr Korea", "price": 9, "discount": 0.5, "date": "2011-08-31" },
+                                    { "name": "Guarana¡ Fanta¡stica", "price": 4.5, "discount": 0.45, "date": "2008-03-13" },
+                                    { "name": "NuNuCa Nuaa-Nougat-Creme", "price": 14, "discount": 0, "date": "2011-07-20" },
+                                    { "name": "Gumbar Gummibarchen", "price": 31.23, "discount": 0.03, "date": "2009-04-17" },
+                                    { "name": "Schoggi Schokolade", "price": 43.9, "discount": 0.04, "date": "2007-01-14" },
+                                    { "name": "Russle Sauerkraut", "price": 45.6, "discount": 0.05, "date": "2011-01-14" },
+                                    { "name": "Tharinger Rostbratwurst", "price": 123.79, "discount": 0.12, "date": "2010-12-21" },
+                                    { "name": "Nord-Ost Matjeshering", "price": 25.89, "discount": 0.03, "date": "2011-05-14" },
+                                    { "name": "Gorgonzola Telino", "price": 12.5, "discount": 0, "date": "2010-10-30" },
+                                    { "name": "Mascarpone Fabioli", "price": 32, "discount": 0.03, "date": "2011-07-30" },
+                                    { "name": "Geitost", "price": 2.5, "discount": 0.25, "date": "2010-04-29" },
+                                    { "name": "Sasquatch Ale", "price": 14, "discount": 0, "date": "2010-07-30" },
+                                    { "name": "Steeleye Stout", "price": 18, "discount": 0, "date": "2011-04-25" },
+                                    { "name": "Inlagd Sill", "price": 19, "discount": 0, "date": "1980-11-28" },
+                                    { "name": "Gravad lax", "price": 26, "discount": 0.03, "date": "1983-08-31" },
+                                    { "name": "Cate de Blaye", "price": 263.5, "discount": 0.26, "date": "1981-07-12" },
+                                    { "name": "Chartreuse verte", "price": 18, "discount": 0, "date": "1984-04-08" },
+                                    { "name": "Boston Crab Meat", "price": 18.4, "discount": 0, "date": "1976-12-08" },
+                                    { "name": "Jack\u0027s New England Clam Chowder", "price": 9.65, "discount": 0.5, "date": "1979-09-10" },
+                                    { "name": "Singaporean Hokkien Fried Mee", "price": 14, "discount": 0, "date": "1973-11-21" },
+                                    { "name": "Ipoh Coffee", "price": 46, "discount": 0.05, "date": "1980-03-20" },
+                                    { "name": "Gula Malacca", "price": 19.45, "discount": 0, "date": "1970-10-25" },
+                                    { "name": "Rogede sild", "price": 9.5, "discount": 0.5, "date": "1990-09-21" },
+                                    { "name": "Spegesild", "price": 12, "discount": 0, "date": "1993-06-23" },
+                                    { "name": "Zaanse koeken", "price": 9.5, "discount": 0.5, "date": "1981-11-25" },
+                                    { "name": "Chocolade", "price": 12.75, "discount": 0, "date": "1984-08-24" },
+                                    { "name": "Maxilaku", "price": 20, "discount": 0, "date": "1987-05-23" },
+                                    { "name": "Valkoinen suklaa", "price": 16.25, "discount": 0, "date": "1990-02-17" },
+                                    { "name": "Manjimup Dried Apples", "price": 53, "discount": 0.05, "date": "2004-05-22" },
+                                    { "name": "Filo Mix", "price": 7, "discount": 0.5, "date": "2001-05-20" },
+                                    { "name": "Perth Pasties", "price": 32.8, "discount": 0.03, "date": "2007-01-06" },
+                                    { "name": "Tourtiare", "price": 7.45, "discount": 0.5, "date": "2009-10-07" },
+                                    { "name": "Pacta chinois", "price": 24, "discount": 0, "date": "2007-07-08" },
+                                    { "name": "Gnocchi di nonna Alice", "price": 38, "discount": 0.04, "date": "2007-05-18" },
+                                    { "name": "Ravioli Angelo", "price": 19.5, "discount": 0, "date": "2010-02-16" },
+                                    { "name": "Escargots de Bourgogne", "price": 13.25, "discount": 0, "date": "2011-07-26" },
+                                    { "name": "Raclette Courdavault", "price": 55, "discount": 0.05, "date": "2007-09-22" },
+                                    { "name": "Camembert Pierrot", "price": 34, "discount": 0.03, "date": "2010-06-20" },
+                                    { "name": "Sirop d\u0027aOrable", "price": 28.5, "discount": 0.03, "date": "2007-05-29" },
+                                    { "name": "Tarte au sucre", "price": 49.3, "discount": 0.05, "date": "2008-01-21" },
+                                    { "name": "Vegie-spread", "price": 43.9, "discount": 0.04, "date": "2007-11-21" },
+                                    { "name": "Wimmers gute Semmelknadel", "price": 33.25, "discount": 0.03, "date": "2009-05-15" },
+                                    { "name": "Louisiana Fiery Hot Pepper Sauce", "price": 21.05, "discount": 0, "date": "2008-05-15" },
+                                    { "name": "Louisiana Hot Spiced Okra", "price": 17, "discount": 0, "date": "2011-02-10" },
+                                    { "name": "Laughing Lumberjack Lager", "price": 14, "discount": 0, "date": "2010-12-05" },
+                                    { "name": "Scottish Longbreads", "price": 12.5, "discount": 0, "date": "2009-07-08" },
+                                    { "name": "Gudbrandsdalsost", "price": 36, "discount": 0.04, "date": "2011-03-09" },
+                                    { "name": "Outback Lager", "price": 15, "discount": 0, "date": "2009-02-21" },
+                                    { "name": "Flotemysost", "price": 21.5, "discount": 0, "date": "1980-09-04" },
+                                    { "name": "Mozzarella di Giovanni", "price": 34.8, "discount": 0.03, "date": "1983-06-03" },
+                                    { "name": "Rad Kaviar", "price": 15, "discount": 0, "date": "1982-12-03" },
+                                    { "name": "Longlife Tofu", "price": 10, "discount": 0.5, "date": "1982-09-27" },
+                                    { "name": "RhanbrAu Klosterbier", "price": 7.75, "discount": 0.5, "date": "1982-10-31" },
+                                    { "name": "Lakkalik AAri", "price": 18, "discount": 0, "date": "1970-07-28" },
+                                    { "name": "Original Frankfurter grane Soae", "price": 13, "discount": 0, "date": "1976-04-04" },
+                                    { "name": "Chai", "price": 19, "discount": 0, "date": "1984-04-04" },
+                                ];
+                
+                $scope.value = "name"
+                $scope.order = function(value){
+                    $scope.value = value;
+                }
+
+
+                $scope.page = 0;
+                $scope.changePage = function(value){
+                    $scope.page = $scope.list.length - ($scope.list.length - (value-1)*8)
+                }
+                $scope.first = 1;
+                $scope.last = function(){
+                    var j = 0;
+                    for(var i = 0; i < $scope.list.length; i++){
+                        if(i <= ($scope.list.length + 4) / 8 && i != 0){
+                            j = i;
+                        }
+                    }
+                    return j;
+                }
+            });
+            
+
+            app.filter("percentage", function(){
+                    return function(input, value1){
+                        var out = input*100; 
+                        out = (out + "");
+                        if(out.length < 5){
+                            if(out.indexOf(".") < 0){
+                                out = out + ".00%";
+                            } else {
+                                var temp = out;
+                                temp = out.slice(out.indexOf("."));
+                                out = out + "0%"
+                            }
+                        } else {
+                            out = out.slice(0, out.indexOf(".") + 1 + value1) + "%";
+                        }
+                        return out
+                    };
+            });
+
+            // app.filter("percentage", function($filter){
+            //         return function(input, value1){
+            //             return $filter('number')(input*100, value1) + "%";
+            //         };
+            // });
+        </script>
+    </body>
+</html>
