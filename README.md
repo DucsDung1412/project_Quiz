@@ -5,4 +5,4 @@
 <h4>Responsibilities: </h4>
       <h6>- Build frontend</h6>
 <h4>Technology in use:</h4>
-      <h6>- Frontend: HTML, CSS, JavaScript, Boostrap</h6>
+      <h6>- Frontend: HTML, CSS, JavaScript, Boostrap, AngularJS</h6>
